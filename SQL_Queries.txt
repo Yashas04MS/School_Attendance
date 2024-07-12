@@ -1,0 +1,44 @@
+CREATE TABLE User (
+    UserID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    PhoneNumber VARCHAR(15),
+    Role VARCHAR(10) CHECK (Role IN ('Student', 'Parent', 'Teacher'))
+);
+
+CREATE TABLE Student (
+    StudentID INT PRIMARY KEY,
+    UserID INT,
+    Grade INT,
+    Classroom VARCHAR(10),
+    ParentID INT,
+    FOREIGN KEY (UserID) REFERENCES User(UserID),
+    FOREIGN KEY (ParentID) REFERENCES User(UserID)
+);
+
+CREATE TABLE Teacher (
+    TeacherID INT PRIMARY KEY,
+    UserID INT,
+    Department VARCHAR(50),
+    Grade INT,
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
+);
+
+CREATE TABLE Attendance (
+    AttendanceID INT PRIMARY KEY,
+    StudentID INT,
+    Date DATE,
+    Status VARCHAR(10) CHECK (Status IN ('Present', 'Absent', 'Late')),
+    Reason VARCHAR(255),
+    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)
+);
+
+CREATE TABLE Intervention (
+    InterventionID INT PRIMARY KEY,
+    StudentID INT,
+    Date DATE,
+    ActionTaken VARCHAR(255),
+    Notes TEXT,
+    FOREIGN KEY (StudentID) REFERENCES Student(StudentID)
+);
